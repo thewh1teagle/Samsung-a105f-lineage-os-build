@@ -16,18 +16,21 @@ RUN apt-get install -y \
     rsync schedtool squashfs-tools \
     xsltproc zip zlib1g-dev \
     # choose 7 for older lineage os \
-    python3 
+    python
 
 RUN apt-get install -y \
     openjdk-8-jdk 
 
-RUN mkdir -p ~/android/lineage
-RUN cd ~/android/lineage 
-WORKDIR ~/android/lineage 
+RUN mkdir /workspace
+WORKDIR /workspace
+RUN mkdir -p android/lineage 
+RUN mkdir bin
+RUN curl https://storage.googleapis.com/git-repo-downloads/repo > bin/repo
+RUN chmod a+x bin/repo
+RUN echo 'export PATH=$PATH:/workspace/bin' >> ~/.bashrc
 
-RUN mkdir -p ~/bin
-RUN curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
-RUN chmod a+x ~/bin/repo
-RUN ln -s /usr/bin/python3 /usr/bin/python
-RUN ~/bin/repo init -u git://github.com/LineageOS/android.git -b lineage-17.1
-# RUN ~/bin/repo sync
+RUN git config --global user.email "you@example.com"
+RUN git config --global user.name "Your Name"
+
+RUN cd android/lineage
+WORKDIR /workspace/android/lineage
